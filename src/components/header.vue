@@ -5,33 +5,46 @@
       <router-link to="/column/zl" tag="p">专栏</router-link>
       <router-link to="/skill/js" tag="p">技术</router-link>
       <router-link to="/life/sh" tag="p">生活</router-link>
-      <DropDown />
+      <DropDown @login="handleShowLogin" />
     </div>
     <div class="hidden-sm-and-up xs-menu">
-      <div class="header">
-        <el-button v-model="isCollapse" @click="isCollapse = !isCollapse" icon="el-icon-s-unfold"></el-button>
-        <DropDown />
+      <div :class="this.isCollapse ? 'header' : 'header showHeader'">
+        <el-button
+          v-model="isCollapse"
+          @click="isCollapse = !isCollapse"
+          icon="el-icon-s-unfold"
+        ></el-button>
+        <DropDown @login="handleShowLogin" />
       </div>
-      <el-menu router :class="
+      <el-menu
+        router
+        :class="
           this.isCollapse
-            ? 'el-menu-vertical-demo'
+            ? 'el-menu-vertical-demo none'
             : 'el-menu-vertical-demo showMenu'
-        " @open="handleOpen" @close="handleClose" :collapse="isCollapse" default-active="/">
+        "
+        @open="handleOpen"
+        @close="handleClose"
+        :collapse="isCollapse"
+        default-active="/"
+      >
         <el-menu-item index="/">
           <i class="el-icon-menu"></i>
           <span slot="title">首页</span>
         </el-menu-item>
-        <el-menu-item index="/column">
+        <el-menu-item index="/column/zl">
           <i class="el-icon-s-promotion"></i>
           <span slot="title">专栏</span>
         </el-menu-item>
-        <el-menu-item index="/skill">
+        <el-menu-item index="/skill/js">
           <i class="el-icon-document"></i>
           <span slot="title">技术</span>
         </el-menu-item>
-        <el-menu-item index="/life">
-          <i class="el-icon-camera-solid
-"></i>
+        <el-menu-item index="/life/sh">
+          <i
+            class="el-icon-camera-solid
+"
+          ></i>
           <span slot="title">生活</span>
         </el-menu-item>
       </el-menu>
@@ -43,17 +56,20 @@
 import 'element-ui/lib/theme-chalk/display.css'
 import DropDown from './dropDown'
 export default {
-  data () {
+  data() {
     return {
       isCollapse: true,
       sessionName: '',
     }
   },
   methods: {
-    handleOpen (key, keyPath) {
+    handleShowLogin() {
+      this.$emit('login', true)
+    },
+    handleOpen(key, keyPath) {
       console.log(key, keyPath)
     },
-    handleClose (key, keyPath) {
+    handleClose(key, keyPath) {
       console.log(key, keyPath)
     },
     // handleLogout () {
@@ -73,6 +89,8 @@ export default {
   width: 100%;
   height: 60px;
   background: rgba(0, 0, 0, 0.16);
+  position: fixed;
+  top: 0;
 }
 
 .menu > p {
@@ -93,6 +111,9 @@ export default {
   min-height: 200px;
   background: rgba(255, 255, 255, 0.8);
 }
+.none {
+  display: none;
+}
 .xs-menu {
   width: 100%;
 }
@@ -103,6 +124,7 @@ export default {
   width: 100%;
   height: 60px;
   background: rgba(0, 0, 0, 0.14);
+  position: fixed;
 }
 .header .el-button {
   float: left;
@@ -117,7 +139,14 @@ export default {
 }
 .xs-menu .showMenu {
   background: rgba(0, 0, 0, 0.55);
+  margin-top: 60px;
+  position: fixed;
 }
+.showHeader {
+  background: rgba(0, 0, 0, 0.55);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.5);
+}
+
 .xs-menu .showMenu .el-menu-item {
   width: 50%;
   height: 100px;

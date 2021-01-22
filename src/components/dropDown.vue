@@ -1,5 +1,5 @@
 <template>
-  <el-dropdown @command="handleSet">
+  <el-dropdown @command="handleSet" v-if="sessionName">
     <span class="el-dropdown-link">
       {{ sessionName
       }}<i
@@ -15,6 +15,9 @@
       <el-dropdown-item command="logout">退出</el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
+  <div v-else class="el-dropdown" @click="handleShowLogin">
+    <span class="el-dropdown-link write">写文章</span>
+  </div>
 </template>
 <script>
 export default {
@@ -32,6 +35,9 @@ export default {
     }
   },
   methods: {
+    handleShowLogin() {
+      this.$emit('login', true)
+    },
     // 退出登录
     handleSet(command) {
       if (command == 'logout') {
@@ -59,6 +65,9 @@ export default {
   position: absolute;
   right: 20px;
   margin-top: 20px;
+}
+.write:hover {
+  color: #e6a23c;
 }
 .el-dropdown-link {
   cursor: pointer;

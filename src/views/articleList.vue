@@ -27,7 +27,7 @@
           <p style="color:#999AAA;font-size:14px;margin-bottom:8px">
             {{ item.timeCreate }}
           </p>
-          <p v-html="item.article"></p>
+          <p class="aircontent" v-html="item.article"></p>
         </div>
       </el-card>
     </div>
@@ -55,26 +55,27 @@ export default {
       this.title = this.$route.params.type
       this.warning = ''
       this.articleList = []
-      this.$axios
-        .post('http://localhost:3000/blog/article', this.$route.params)
+      let param = this.$route.params
+      this.$serve
+        .article({
+          ...param,
+        })
         .then((res) => {
           this.isReady = false
-          console.log(res)
-          if (res.data.errCode == '0') {
-            this.articleList = res.data.article
+          if (res.errCode == '0') {
+            this.articleList = res.article
           } else {
-            this.warning = res.data.errMsg
+            this.warning = res.errMsg
           }
         })
     },
     handleDel(id) {
-      this.$axios
-        .post('http://localhost:3000/blog/delete', {
+      this.$serve
+        .delete({
           id: id,
         })
         .then((res) => {
-          console.log(res)
-          if (res.data.errCode == '0') {
+          if (res.errCode == '0') {
             this.handleSource()
             this.$message({
               type: 'success',
@@ -101,6 +102,12 @@ export default {
 }
 </script>
 <style>
+.box-card {
+  margin-bottom: 20px;
+}
+.aircontent {
+  overflow: hidden;
+}
 .el-button--primary {
   background: transparent;
   color: #606266;

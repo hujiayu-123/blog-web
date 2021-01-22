@@ -1,13 +1,21 @@
 <template>
   <div class="layout">
     <div class="header">
-      <Header :name="name" />
-      <div class="title">
+      <Header :name="name" @login="handleShowForm('login')" />
+      <!-- <div class="title">
         <p class="blog">个人博客</p>
         <p class="author">胡佳钰</p>
-        <el-button type="success" width="100px" round @click="handleShowForm('login')">登录</el-button>
-        <el-button type="warning" @click="handleShowForm('register')" round>注册</el-button>
-      </div>
+        <el-button
+          type="success"
+          width="100px"
+          round
+          @click="handleShowForm('login')"
+          >登录</el-button
+        >
+        <el-button type="warning" @click="handleShowForm('register')" round
+          >注册</el-button
+        >
+      </div> -->
     </div>
     <div class="section"></div>
     <div class="bg">
@@ -19,21 +27,47 @@
       </div>
     </div>
     <div class="footer"></div>
-    <el-dialog :title="formStatus == 'login' ? '登录' : '注册'" :visible.sync="FormVisible" width="40vh"
-      custom-class="dialog">
-      <el-form status-icon :model="form" :rules="rules" ref="form" class="demo-ruleForm">
+    <el-dialog
+      :title="formStatus == 'login' ? '登录' : '注册'"
+      :visible.sync="FormVisible"
+      width="40vh"
+      custom-class="dialog"
+    >
+      <el-form
+        status-icon
+        :model="form"
+        :rules="rules"
+        ref="form"
+        class="demo-ruleForm"
+      >
         <el-form-item label="用户名" prop="name">
           <el-input v-model="form.name" autocomplete="off"></el-input>
         </el-form-item>
         <el-form-item label="密码" prop="pwd">
-          <el-input type="password" v-model="form.pwd" autocomplete="off"></el-input>
+          <el-input
+            type="password"
+            v-model="form.pwd"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
-        <el-form-item label="确认密码" prop="okpwd" :class="formStatus == 'register' ? null : 'okpwd'">
-          <el-input type="password" v-model="form.okpwd" autocomplete="off"></el-input>
+        <el-form-item
+          label="确认密码"
+          prop="okpwd"
+          :class="formStatus == 'register' ? null : 'okpwd'"
+        >
+          <el-input
+            type="password"
+            v-model="form.okpwd"
+            autocomplete="off"
+          ></el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="isReady" @click="formStatus == 'login'?handleLogin():handleRegister()">确 定
+        <el-button
+          type="primary"
+          :loading="isReady"
+          @click="formStatus == 'login' ? handleLogin() : handleRegister()"
+          >确 定
         </el-button>
       </div>
     </el-dialog>
@@ -43,7 +77,7 @@
 <script>
 import Header from '../components/header'
 export default {
-  data () {
+  data() {
     var checkpwd = (rule, value, callback) => {
       if (value === '') {
         callback(new Error('请再次输入密码'))
@@ -73,15 +107,15 @@ export default {
   },
   inject: ['reload'],
   methods: {
-    handleShowForm (status) {
+    handleShowForm(status) {
       this.formStatus = status
 
       if (this.formStatus == 'login') {
         if (sessionStorage.getItem('userinfo')) {
           this.$message({
             message: '您已登录，切勿重复操作',
-            type: 'warning'
-          });
+            type: 'warning',
+          })
         } else {
           this.FormVisible = true
 
@@ -93,72 +127,75 @@ export default {
         this.$prompt('请输入管理员授权密码', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
-        }).then(({ value }) => {
-          if (value == 'qwert147') {
-            this.FormVisible = true
+        })
+          .then(({ value }) => {
+            if (value == 'qwert147') {
+              this.FormVisible = true
 
-            if (this.$refs.form) {
-              this.$refs.form.resetFields()
+              if (this.$refs.form) {
+                this.$refs.form.resetFields()
+              }
+            } else {
+              this.$message.error('密码错误，请联系管理员')
             }
-          } else {
-            this.$message.error("密码错误，请联系管理员");
-          }
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '取消输入'
-          });
-        });
+          })
+          .catch(() => {
+            this.$message({
+              type: 'info',
+              message: '取消输入',
+            })
+          })
       }
-
     },
     // 注册
-    handleRegister () {
+    handleRegister() {
       this.isReady = true
-      this.$axios
-        .post('http://localhost:3000/blog/register', {
+      this.$serve
+        .register({
           name: this.form.name,
           pwd: this.form.okpwd,
         })
         .then((res) => {
           this.isReady = false
-          console.log(res)
-          if (res.data) {
+          if (res) {
             this.FormVisible = false
             this.$message({
               message: '注册成功',
-              type: 'success'
-            });
+              type: 'success',
+            })
           }
         })
     },
     // 登录
-    handleLogin () {
+    handleLogin() {
       this.isReady = true
-      this.$axios.post('http://localhost:3000/blog/login', {
-        name: this.form.name,
-        pwd: this.form.pwd
-      }).then((res) => {
-        this.isReady = false
-        if (res.data.errCode == "0") {
-          this.FormVisible = false
-          this.$message({
-            message: '登录成功',
-            type: 'success'
-          });
-          this.reload()
-          let userinfo = { token: res.data.token, ...res.data.user, }
-          sessionStorage.setItem('userinfo', JSON.stringify(userinfo))
-          this.name = userinfo.name
-        } else {
-          this.$message({
-            message: res.data.errMsg,
-            type: 'warning'
-          })
-        }
-      }).catch(() => {
-        this.$message.error('登录超时，请稍候重试')
-      })
+      this.$serve
+        .login({
+          name: this.form.name,
+          pwd: this.form.pwd,
+        })
+        .then((res) => {
+          this.isReady = false
+          if (res.errCode == '0') {
+            this.FormVisible = false
+            this.$message({
+              message: '登录成功',
+              type: 'success',
+            })
+            this.reload()
+            let userinfo = { token: res.token, ...res.user }
+            sessionStorage.setItem('userinfo', JSON.stringify(userinfo))
+            this.name = userinfo.name
+          } else {
+            this.$message({
+              message: res.errMsg,
+              type: 'warning',
+            })
+          }
+        })
+        .catch(() => {
+          this.$message.error('登录超时，请稍候重试')
+        })
     },
   },
   components: {

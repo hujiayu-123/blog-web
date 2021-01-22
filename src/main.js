@@ -3,17 +3,17 @@ import App from './App.vue'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 import router from './router'
-import axios from 'axios'
-import qs from 'qs'
+import serve from "@/service/api"
 import Tinymce from 'tinymce'
 import moment from 'moment'
+import axios from 'axios'
 
 Vue.use(ElementUI)
 Vue.config.productionTip = false
 Vue.prototype.$axios = axios
-Vue.prototype.$qs = qs
 Vue.prototype.$tinymce = Tinymce
 Vue.prototype.$moment = moment
+Vue.prototype.$serve = serve
 
 new Vue({
   render: (h) => h(App),
