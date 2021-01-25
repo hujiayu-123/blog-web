@@ -17,16 +17,9 @@
         >
       </div> -->
     </div>
-    <div class="section"></div>
-    <div class="bg">
-      <div class="bg-op">
-        <div class="text">
-          <p>"GOOD GOOD STUDY</p>
-          <p>DAY DAY UP"</p>
-        </div>
-      </div>
+    <div class="section">
+      <router-view></router-view>
     </div>
-    <div class="footer"></div>
     <el-dialog
       :title="formStatus == 'login' ? '登录' : '注册'"
       :visible.sync="FormVisible"
@@ -204,85 +197,57 @@ export default {
 }
 </script>
 
-<style>
-.el-message {
-  min-width: 200px;
-  max-width: 320px;
-}
-.okpwd {
-  display: none;
-}
+<style lang="less">
 .layout {
-  width: 100%;
-  height: 100vh;
-}
-.header {
-  overflow: hidden;
-  width: 100%;
-  height: 100%;
-  background: url(../assets/bg.jpg) no-repeat bottom center;
-  background-attachment: fixed;
-  background-size: cover;
-  text-align: center;
-}
-.header .title {
-  height: 200px;
-  margin: 200px auto;
-}
-.header .title .blog {
-  font-size: 60px;
-  color: rgba(255, 255, 255, 0.8);
-}
-.header .title .author {
-  color: rgba(255, 255, 255, 0.6);
-  font-size: 20px;
-  margin-top: 10px;
-}
-.header .title > .el-button {
-  margin-top: 30px;
-}
-.el-dialog .el-dialog__body {
-  padding: 0px 20px;
-}
-.el-dialog .el-button {
-  width: 100%;
-  background: #b6976b;
-  border: 0;
-}
-.section {
-  width: 100%;
-  height: 1000px;
-  background: white;
-}
-.bg {
-  width: 100%;
-  height: 350px;
-  background: url(../assets/bg.jpg) no-repeat center center;
-  background-attachment: fixed;
-  text-align: center;
-  background-size: cover;
-}
-.bg .bg-op {
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.45);
-  overflow: hidden;
-}
-.bg .bg-op .text {
-  height: 150px;
-  width: 90%;
-  margin: 100px auto;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-  border-top: 1px solid rgba(255, 255, 255, 0.12);
-}
-.bg .bg-op .text > p {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 30px;
-  margin-top: 20px;
-}
-.footer {
-  width: 100%;
-  height: 300px;
-  background: black;
+  .el-message {
+    min-width: 200px;
+    max-width: 320px;
+  }
+  .okpwd {
+    display: none;
+  }
+  .layout {
+    width: 100%;
+    height: 100vh;
+  }
+  .el-dialog .el-dialog__body {
+    padding: 0px 20px;
+  }
+  .el-dialog .el-button {
+    width: 100%;
+    background: #b6976b;
+    border: 0;
+  }
+  .bg {
+    width: 100%;
+    height: 350px;
+    background: url(../assets/bg.jpg) no-repeat center center;
+    background-attachment: fixed;
+    text-align: center;
+    background-size: cover;
+  }
+  .bg .bg-op {
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.45);
+    overflow: hidden;
+  }
+  .bg .bg-op .text {
+    height: 150px;
+    width: 90%;
+    margin: 100px auto;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    border-top: 1px solid rgba(255, 255, 255, 0.12);
+  }
+  .bg .bg-op .text > p {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 30px;
+    margin-top: 20px;
+  }
+  .footer {
+    width: 100%;
+    height: 300px;
+    background: black;
+  }
 }
 </style>

@@ -51,7 +51,10 @@ export default {
         }
         sessionStorage.clear()
       } else {
-        this.$router.push('/release')
+        let routeUrl = this.$router.resolve({
+          path: `/release`,
+        })
+        window.open(routeUrl.href, '_blank')
       }
     },
   },

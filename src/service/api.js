@@ -42,6 +42,20 @@ const serve = {
       method: "post",
       data
     })
+  },
+  // 修改文章
+  edit(data) {
+    return http('/blog/edit',{
+      method: "post",
+      data
+    })
+  },
+  // 上传图片
+  upload(data) {
+    return http('/blog/upload',{
+      method: "post",
+      data
+    })
   }
 }
 

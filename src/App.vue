@@ -7,26 +7,25 @@
 <script>
 export default {
   name: 'App',
-  provide () {
+  provide() {
     return {
-      reload: this.reload
+      reload: this.reload,
     }
   },
-  data () {
+  data() {
     return {
-      isRouterAlive: true
+      isRouterAlive: true,
     }
   },
   methods: {
-    reload () {
+    reload() {
       this.isRouterAlive = false
-      this.$nextTick(function () {
+      this.$nextTick(function() {
         this.isRouterAlive = true
       })
-    }
+    },
   },
   components: {},
-
 }
 </script>
 
@@ -35,7 +34,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
 }
 .router-link-active {

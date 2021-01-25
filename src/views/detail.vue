@@ -1,6 +1,5 @@
 <template>
   <div class="detail">
-    <Header />
     <div class="release"></div>
     <div
       class="content"
@@ -10,26 +9,52 @@
     >
       <h1>{{ detail.title }}</h1>
       <div class="auth-info">
-        <el-image :src="require('@/assets/original.png')"></el-image>
-        <a
-          style="display: inline-block;position: absolute;margin: 9px 20px 20px; color:#409eff;font-size:14px"
-          ><span>{{ detail.author }}</span
-          ><span style="margin-left:30px;color:#999AAA">{{
-            detail.timeCreate
-          }}</span></a
-        >
+        <div class="left">
+          <div>
+            <el-image :src="require('@/assets/original.png')"></el-image>
+            <a
+              style="display: inline-block;position: absolute;margin: 9px 20px 20px; color:#409eff;font-size:14px"
+              ><span class="author" @click="handleToList">{{
+                detail.author
+              }}</span
+              ><span style="margin-left:30px;color:#999AAA">{{
+                detail.timeCreate
+              }}</span>
+              <i class="el-icon-user-solid icon"></i
+              ><span class="lookName">{{ lookNum }}</span></a
+            >
+          </div>
+          <div class="des">
+            <div>文章类型：</div>
+            <div class="label">{{ detail.type }}</div>
+            <div class="label-txt">文章标签：</div>
+            <div class="label" v-for="item in detail.label" :key="item">
+              {{ item }}
+            </div>
+          </div>
+        </div>
+        <div class="right" @click="handleToRelease" v-if="isShow">
+          编辑
+        </div>
       </div>
-      <div style="margin-top:15px" v-html="detail.article"></div>
+      <div
+        style="margin-top:15px"
+        class="markdown-body"
+        v-html="detail.article"
+      ></div>
     </div>
   </div>
 </template>
 <script>
-import Header from '../components/header'
+import { articleType } from '../utils'
 export default {
   data() {
     return {
       detail: {},
       isReady: true,
+      isShow: false,
+      lookNum: 0,
+      articleType,
     }
   },
   created() {
@@ -40,53 +65,125 @@ export default {
       .then((res) => {
         if (res.errCode == '0') {
           this.detail = res.article
+          this.detail.type = articleType.find(
+            (v) => v.value === this.detail.type
+          ).name
+          this.handleIsRole()
           this.isReady = false
         }
       })
   },
-  components: {
-    Header,
+  methods: {
+    handleIsRole() {
+      let userinfo = JSON.parse(sessionStorage.getItem('userinfo'))
+      if (userinfo) {
+        if (this.detail.author === userinfo.name) {
+          this.isShow = true
+        } else {
+          this.isShow = false
+        }
+      } else {
+        this.isShow = false
+      }
+    },
+    handleToRelease() {
+      let routeUrl = this.$router.resolve({
+        path: `/release`,
+        query: {
+          detail: JSON.stringify(this.detail),
+        },
+      })
+      window.open(routeUrl.href, '_blank')
+    },
+    handleToList() {
+      let routeUrl = this.$router.resolve({
+        path: `/userlist`,
+        query: {
+          author: this.detail.author,
+        },
+      })
+      window.open(routeUrl.href, '_blank')
+    },
   },
 }
 </script>
-<style>
+<style lang="less">
 .detail {
   overflow: hidden;
-}
-.content .el-image__inner {
-  width: 40px;
-}
-.el-loading-parent--relative {
-  position: static !important;
-}
-.content {
-  width: 80%;
-  margin: 0 auto;
-  box-sizing: border-box;
-  text-align: left;
-  margin-top: 80px;
-  background: floralwhite;
-  border-radius: 6px;
-  padding: 20px;
-  min-height: calc(100vh - 80px);
-}
-.release {
-  z-index: -1;
-  width: 100%;
-  height: 100%;
-  filter: alpha(opacity=50);
-  -moz-opacity: 0.5;
-  -khtml-opacity: 0.5;
-  opacity: 0.5;
-  background: url(../assets/bg.jpg) no-repeat center center;
-  background-attachment: fixed;
-  background-size: cover;
-  position: fixed;
-}
-.auth-info {
-  background: #f0f0f0;
-  padding: 5px;
-  border-radius: 4px;
-  margin-top: 10px;
+  .content .el-image__inner {
+    width: 40px;
+  }
+  .el-loading-parent--relative {
+    position: static !important;
+  }
+  .content {
+    width: 80%;
+    margin: 0 auto;
+    box-sizing: border-box;
+    text-align: left;
+    margin-top: 80px;
+    background: white;
+    border-radius: 6px;
+    padding: 20px;
+    min-height: calc(100vh - 80px);
+  }
+  .release {
+    z-index: -1;
+    width: 100%;
+    height: 100%;
+    background: url(../assets/bg.jpg) no-repeat center center;
+    background-attachment: fixed;
+    background-size: cover;
+    position: fixed;
+  }
+  .auth-info {
+    background: #f0f0f0;
+    padding: 5px;
+    border-radius: 4px;
+    margin-top: 10px;
+    display: flex;
+    justify-content: space-between;
+    .author {
+      cursor: pointer;
+      &:hover {
+        color: rgb(65, 119, 255);
+      }
+    }
+    .des {
+      margin-left: 58px;
+      display: flex;
+      font-size: 14px;
+      color: #999aaa;
+      .label-txt {
+        margin-left: 20px;
+      }
+      .label {
+        font-size: 12px;
+        padding: 1px 4px;
+        background: #fff;
+        border: 1px solid #eaeaef;
+        color: #5094d5;
+        border-radius: 4px;
+        margin-right: 5px;
+      }
+    }
+    .icon {
+      margin-left: 20px;
+      color: #999aaa;
+    }
+    .lookName {
+      color: #999aaa;
+      margin-left: 5px;
+    }
+    .right {
+      margin-right: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      color: #8fb0c9;
+      &:hover {
+        color: #e6a23c;
+      }
+    }
+  }
 }
 </style>
