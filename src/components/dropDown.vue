@@ -60,7 +60,7 @@ export default {
   },
 }
 </script>
-<style scoped>
+<style scoped lang="less">
 .hidden {
   display: none;
 }
@@ -70,7 +70,7 @@ export default {
   margin-top: 20px;
 }
 .write:hover {
-  color: #e6a23c;
+  color: @themeColor;
 }
 .el-dropdown-link {
   cursor: pointer;

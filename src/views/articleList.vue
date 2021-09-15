@@ -2,34 +2,38 @@
   <div class="list">
     <div class="bg"></div>
     <div class="article">
-      <h3>{{ titleList[title] }}篇</h3>
-      <p style="color:red;margin-top:20px">{{ warning }}</p>
-      <el-card
-        class="box-card"
-        v-for="item in articleList"
-        :key="item._id"
-        v-loading="isReady"
-      >
-        <div slot="header" class="clearfix">
-          <div class="title" @click="handleDetail(item)">{{ item.title }}</div>
-          <div class="author" @click="handleToList(item)">
-            {{ item.author }}
-          </div>
-        </div>
-        <div class="text item">
-          <div class="info">
-            <div class="time">{{ item.timeCreate }}</div>
-            <div
-              class="del"
-              @click="handleDel(item.ids)"
-              v-if="item.author === userName"
-            >
-              删除
+      <p class="tip" v-show="articleList.length === 0">
+        该栏目暂未发表文章哦，去别处看看吧
+      </p>
+      <el-timeline>
+        <el-timeline-item
+          :timestamp="item.timeCreate"
+          placement="top"
+          v-for="item in articleList"
+          :key="item._id"
+        >
+          <el-card class="box-card">
+            <div class="clearfix">
+              <h4 class="title" @click="handleDetail(item)">
+                {{ item.title }}
+              </h4>
+              <div class="info">
+                <div
+                  class="del"
+                  @click="handleDel(item.ids)"
+                  v-if="item.author === userName"
+                >
+                  删除
+                </div>
+                <div class="author" @click="handleToList(item)">
+                  {{ item.author }}
+                </div>
+              </div>
             </div>
-          </div>
-          <div class="aircontent">{{ item.article | filterEditor }}</div>
-        </div>
-      </el-card>
+            <p class="mat20">{{ item.article | filterEditor }}</p>
+          </el-card>
+        </el-timeline-item>
+      </el-timeline>
     </div>
   </div>
 </template>
@@ -44,7 +48,6 @@ export default {
       titleList: { zl: '专栏', js: '技术', sh: '生活' },
       title: '',
       articleList: [],
-      warning: '',
       userName: '',
     }
   },
@@ -62,7 +65,6 @@ export default {
   methods: {
     handleSource() {
       this.title = this.$route.params.type
-      this.warning = ''
       this.articleList = []
       let param = this.$route.params
       this.$serve
@@ -73,8 +75,6 @@ export default {
           this.isReady = false
           if (res.errCode == '0') {
             this.articleList = res.article
-          } else {
-            this.warning = '该栏目暂未发表文章'
           }
         })
     },
@@ -120,39 +120,42 @@ export default {
 }
 </script>
 <style lang="less">
+.mat20 {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+}
 .list .bg {
   width: 100%;
   height: 350px;
-  background: url(../assets/bg.jpg) no-repeat center bottom;
+  background: url(../assets/images/bg.jpg) no-repeat center bottom;
   background-attachment: fixed;
   text-align: center;
   background-size: cover;
 }
 .box-card {
-  margin-bottom: 20px;
   .el-card__header {
     padding: 0;
   }
   .clearfix {
     display: flex;
     justify-content: space-between;
-    line-height: 50px;
-    height: 50px;
-    padding: 0 20px;
     .title {
       cursor: pointer;
-      width: calc(100% - 60px);
+      width: calc(100% - 100px);
       overflow: hidden;
       text-overflow: ellipsis;
       white-space: nowrap;
       &:hover {
-        color: #e6a23c;
+        color: @themeColor;
       }
     }
     .author {
       font-size: 14px;
       cursor: pointer;
-      color: #e6a23c;
+      color: @themeColor;
     }
   }
   .info {
@@ -165,8 +168,9 @@ export default {
     .del {
       display: none;
       cursor: pointer;
+      margin-right: 10px;
       &:hover {
-        color: #e6a23c;
+        color: @themeColor;
       }
     }
   }
@@ -197,5 +201,14 @@ export default {
 .article {
   width: 90%;
   margin: 20px auto;
+  padding: 10px 0 0;
+  h3 {
+    margin-bottom: 20px;
+  }
+  .tip {
+    font-size: 20px;
+    color: red;
+    margin-top: 20px;
+  }
 }
 </style>

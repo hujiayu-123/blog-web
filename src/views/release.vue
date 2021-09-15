@@ -27,7 +27,7 @@
       </div>
     </div>
     <div class="hidden-sm-and-up sorry">
-      <el-image :src="require('@/assets/sorry.jpg')">
+      <el-image :src="require('@/assets/images/sorry.jpg')">
         <div slot="placeholder" class="image-slot">
           加载中<span class="dot">...</span>
         </div>
@@ -91,6 +91,7 @@
   </div>
 </template>
 <script>
+import 'element-ui/lib/theme-chalk/display.css'
 // 导入组件 及 组件样式
 import { mavonEditor } from 'mavon-editor'
 import 'mavon-editor/dist/css/index.css'
@@ -138,8 +139,10 @@ export default {
     }
   },
   mounted() {
-    if (this.$route.query.detail) {
-      this.handleDetail()
+    let editDetail = localStorage.getItem('editDetail')
+    if (editDetail) {
+      this.handleDetail(editDetail)
+      localStorage.removeItem('editDetail')
     }
     this.$nextTick(() => {
       let input = document.querySelector('.op-image .dropdown-item input')
@@ -147,8 +150,8 @@ export default {
     })
   },
   methods: {
-    handleDetail() {
-      let detail = JSON.parse(this.$route.query.detail)
+    handleDetail(editDetail) {
+      let detail = JSON.parse(editDetail)
       this.formData.content = detail.articleText
       this.title = detail.title
       this.ruleForm.type = detail.type
@@ -202,8 +205,8 @@ export default {
               this.dialogVisible = false
               params.id = res.id
               this.$router.push({
-                path: '/success',
-                query: {
+                name: '发布成功',
+                params: {
                   detail: JSON.stringify(params),
                 },
               })

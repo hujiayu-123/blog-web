@@ -17,7 +17,7 @@ export default {
 .headerTitle {
   width: 100%;
   height: 350px;
-  background: url(../assets/bg.jpg) no-repeat center bottom;
+  background: url(../assets/images/bg.jpg) no-repeat center bottom;
   background-attachment: fixed;
   text-align: center;
   background-size: cover;

@@ -30,7 +30,8 @@ export default {
     }
   },
   mounted() {
-    this.detail = JSON.parse(this.$route.query.detail)
+    console.log(this.$route)
+    this.detail = JSON.parse(this.$route.params.detail)
     this.content = filterEditor(this.detail.article)
   },
   methods: {
@@ -57,7 +58,7 @@ export default {
     border-radius: 4px;
     padding: 20px;
     .mylist {
-      color: #e6a23c;
+      color: @themeColor;
       cursor: pointer;
     }
     .content {
@@ -94,7 +95,7 @@ export default {
       }
       div {
         cursor: pointer;
-        color: #e6a23c;
+        color: @themeColor;
         font-size: 14px;
         &:hover {
           text-decoration: underline;

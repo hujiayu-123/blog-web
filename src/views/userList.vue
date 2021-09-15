@@ -33,7 +33,7 @@
                 </div>
                 <div class="look-num">
                   <i class="el-icon-user-solid icon"></i>
-                  0
+                  {{ item.hits }}
                 </div>
               </div>
             </div>
@@ -85,9 +85,9 @@ export default {
       keywords: '',
       activeType: '',
       image: {
-        sh: require('../assets/life.jpg'),
-        js: require('../assets/technology.jpg'),
-        zl: require('../assets/column.jpg'),
+        sh: require('../assets/images/life.jpg'),
+        js: require('../assets/images/technology.jpg'),
+        zl: require('../assets/images/column.jpg'),
       },
     }
   },
@@ -147,7 +147,7 @@ export default {
     z-index: -1;
     width: 100%;
     height: 100%;
-    background: url(../assets/bg.jpg) no-repeat center center;
+    background: url(../assets/images/bg.jpg) no-repeat center center;
     background-attachment: fixed;
     background-size: cover;
     position: fixed;
@@ -164,6 +164,7 @@ export default {
     align-items: center;
     padding: 0 10%;
     box-sizing: border-box;
+    z-index: 9;
   }
   .section {
     width: 80%;
@@ -184,7 +185,7 @@ export default {
           border-bottom: 1px solid #e8e9e7;
           cursor: pointer;
           &:hover {
-            color: #e6a23c;
+            color: @themeColor;
           }
         }
         .content {
@@ -209,7 +210,7 @@ export default {
             font-weight: bold;
             cursor: pointer;
             &:hover {
-              color: #e6a23c;
+              color: @themeColor;
             }
           }
         }
@@ -229,7 +230,7 @@ export default {
             }
             .label-type {
               border: 1px solid #ddc7a7;
-              color: #e6a23c;
+              color: @themeColor;
             }
           }
           .look-num {
@@ -248,7 +249,7 @@ export default {
         background: #fff;
         .search {
           padding: 20px;
-          background: #e6a23c;
+          background: @themeColor;
         }
       }
       .typelist {
@@ -261,12 +262,12 @@ export default {
           box-sizing: border-box;
           cursor: pointer;
           &:hover {
-            border-right: 5px solid #e6a23c;
+            border-right: 5px solid @themeColor;
             background: rgba(230, 162, 60, 0.3);
           }
         }
         .active-item {
-          border-right: 5px solid #e6a23c;
+          border-right: 5px solid @themeColor;
           background: rgba(230, 162, 60, 0.3);
         }
       }

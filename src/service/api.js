@@ -15,6 +15,13 @@ const serve = {
       data
     })
   },
+  // 验证码
+  captcha(data) {
+    return http('/blog/captcha', {
+      method: "get",
+      data
+    })
+  },
   // 获取文章列表
   article(data) {
     return http('/blog/article',{
@@ -53,6 +60,13 @@ const serve = {
   // 上传图片
   upload(data) {
     return http('/blog/upload',{
+      method: "post",
+      data
+    })
+  },
+  // 文章点击
+  hits(data) {
+    return http('/blog/hits',{
       method: "post",
       data
     })

@@ -11,7 +11,7 @@
       <div class="auth-info">
         <div class="left">
           <div>
-            <el-image :src="require('@/assets/original.png')"></el-image>
+            <el-image :src="require('@/assets/images/original.png')"></el-image>
             <a
               style="display: inline-block;position: absolute;margin: 9px 20px 20px; color:#409eff;font-size:14px"
               ><span class="author" @click="handleToList">{{
@@ -21,7 +21,7 @@
                 detail.timeCreate
               }}</span>
               <i class="el-icon-user-solid icon"></i
-              ><span class="lookName">{{ lookNum }}</span></a
+              ><span class="lookName">{{ detail.hits }}</span></a
             >
           </div>
           <div class="des">
@@ -53,27 +53,38 @@ export default {
       detail: {},
       isReady: true,
       isShow: false,
-      lookNum: 0,
       articleType,
     }
   },
-  created() {
-    this.$serve
-      .detail({
-        id: this.$route.params.id,
-      })
-      .then((res) => {
-        if (res.errCode == '0') {
-          this.detail = res.article
-          this.detail.type = articleType.find(
-            (v) => v.value === this.detail.type
-          ).name
-          this.handleIsRole()
-          this.isReady = false
-        }
-      })
+  mounted() {
+    this.handleHits()
+    this.getDetail()
   },
   methods: {
+    // 添加文章点击量
+    handleHits() {
+      this.$serve.hits({ id: this.$route.params.id }).then((res) => {
+        console.log(res)
+      })
+    },
+    // 获取详情数据
+    getDetail() {
+      this.$serve
+        .detail({
+          id: this.$route.params.id,
+        })
+        .then((res) => {
+          if (res.errCode == '0') {
+            this.detail = res.article
+            this.detail.type = articleType.find(
+              (v) => v.value === this.detail.type
+            ).name
+            this.handleIsRole()
+            this.isReady = false
+          }
+        })
+    },
+    // 判断是否登录
     handleIsRole() {
       let userinfo = JSON.parse(sessionStorage.getItem('userinfo'))
       if (userinfo) {
@@ -86,15 +97,15 @@ export default {
         this.isShow = false
       }
     },
+    // 编辑文章
     handleToRelease() {
       let routeUrl = this.$router.resolve({
         path: `/release`,
-        query: {
-          detail: JSON.stringify(this.detail),
-        },
       })
+      localStorage.setItem('editDetail', JSON.stringify(this.detail))
       window.open(routeUrl.href, '_blank')
     },
+    // 跳转用户列表
     handleToList() {
       let routeUrl = this.$router.resolve({
         path: `/userlist`,
@@ -131,7 +142,7 @@ export default {
     z-index: -1;
     width: 100%;
     height: 100%;
-    background: url(../assets/bg.jpg) no-repeat center center;
+    background: url(../assets/images/bg.jpg) no-repeat center center;
     background-attachment: fixed;
     background-size: cover;
     position: fixed;
@@ -181,7 +192,7 @@ export default {
       font-size: 13px;
       color: #8fb0c9;
       &:hover {
-        color: #e6a23c;
+        color: @themeColor;
       }
     }
   }
